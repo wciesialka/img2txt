@@ -5,7 +5,7 @@ from PIL import Image
 import os
 import re
 
-FLAGS = {'0,0':0x1, '0,1':0x2, '0,2':0x4, '1,0':0x8, '1,1':0x10, '1,2':0x20}
+FLAGS = {'0,0':0x1, '0,1':0x2, '0,2':0x4, '1,0':0x8, '1,1':0x10, '1,2':0x20, '0,3': 0x40, '1,3': 0x80}
 
 def get_file_path():
     path = input("Image to translate: ")
@@ -83,7 +83,7 @@ def dotter_resize(image):
     size = image.size
     w,h = size[0], size[1]
     w += (w%2)
-    h += (h%3)
+    h += (h%4)
     return image.resize((w,h), Image.NEAREST)
 
 def get_braille_pattern(flag):
@@ -97,8 +97,10 @@ def flag_from_sub(sub,threshold=0.5):
             px = sub.getpixel((x,y))
             l,a = px
             l/=255
-            if l <= threshold:
-                flag = flag | FLAGS[f'{x},{y}']
+            a/=255
+            if a > 0.1:
+                if l <= threshold:
+                    flag = flag | FLAGS[f'{x},{y}']
     return flag
 
 def get_threshold():
@@ -119,6 +121,8 @@ def main():
     print("Running ascii-dotter")
     print("====================")
     img, fb = get_image()
+    fb = os.path.basename(fb)
+    fb = fb[:fb.rfind(".")]
     img = img.convert(mode="LA")
     img = dotter_resize(img)
     size = img.size
@@ -126,11 +130,12 @@ def main():
     s = ""
     for y in range(0,size[1],3):
         for x in range(0,size[0],2):
-            box = (x,y,x+2,y+3)
+            box = (x,y,x+2,y+4)
             sub = img.crop(box)
             flag = flag_from_sub(sub,threshold)
             s+=get_braille_pattern(flag)
-        s += os.linesep
+        if y < size[1]-1:
+            s += os.linesep
     write_to_file(s,fb)
 
 if __name__ == "__main__":

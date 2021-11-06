@@ -9,7 +9,7 @@ class BrailleImage:
         self.__width:int = width
         self.__height:int = height
 
-        self.__segments:List[BrailleSegment.BrailleSegment] = [BrailleSegment.BrailleSegment()] * (self.char_width * self.char_height)
+        self.__segments:List[BrailleSegment.BrailleSegment] = [BrailleSegment.BrailleSegment() for _ in range(self.char_width * self.char_height)]
 
 
     @property
@@ -48,7 +48,30 @@ class BrailleImage:
         else:
             cx = floor(x / 2)
             cy = floor(y / 4)
-            return self.__segments[cx + (cy * self.char_width)]
+            i = cx + (cy * self.char_width)
+            return self.__segments[i]
+
+    def plot(self, x:int, y:int, *, unplot:bool = False):
+        '''Plots the "pixel" residing at (x,y).
+        
+        :param x: x-coordinate to plot at.
+        :type x: int
+        :param y: y-coordinate to plot at.
+        :type y: int
+        :param unplot: If True, the method will instead unplot the point residing at (x,y). Default is False.
+        :type unplot: bool'''
+ 
+        segment = self.__get_segment(x,y)
+
+        subx = x % 2
+        suby = y % 4
+
+        flag = BrailleSegment.BrailleFlag.get(subx,suby)   
+
+        if unplot:
+            segment.unset_flag(flag)
+        else:
+            segment.set_flag(flag)
 
     def __repr__(self):
         return f"BrailleImage({self.width},{self.height},list[BrailleSegment])"

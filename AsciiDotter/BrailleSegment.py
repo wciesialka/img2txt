@@ -12,6 +12,27 @@ class BrailleFlag(Enum):
     G:int = 0x40
     H:int = 0x80
 
+    @staticmethod
+    def get(x:int, y:int):
+        if x == 0:
+            if y == 0:
+                return BrailleFlag.A
+            elif y == 1:
+                return BrailleFlag.C
+            elif y == 2:
+                return BrailleFlag.E
+            else:
+                return BrailleFlag.G
+        else:
+            if y == 0:
+                return BrailleFlag.B
+            elif y == 1:
+                return BrailleFlag.D
+            elif y == 2:
+                return BrailleFlag.F
+            else:
+                return BrailleFlag.H
+
 
 class BrailleSegment:
     '''Class representing a 2x4 segment of a BrailleImage. Contains methods for setting and unsetting flags.'''

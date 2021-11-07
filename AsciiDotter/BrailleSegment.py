@@ -1,4 +1,6 @@
+from __future__ import annotations
 from enum import Enum
+
 
 class BrailleFlag(Enum):
     '''Enum containing bit flags used in constructing Braille Unicode characters.'''
@@ -55,6 +57,16 @@ class BrailleSegment:
     def __repr__(self):
 
         return f"BrailleSegment({hex(self.__flags)})"
+
+    def copy(self) -> BrailleSegment:
+        '''Return a copy of the BrailleSegment.'''
+        cp = BrailleSegment()
+        cp.__flags = self.__flags
+        return cp
+
+    def fill(self):
+        '''Completely fill the BrailleSegment.'''
+        self.__flags = 0xFF
 
     def set_flag(self,flag:BrailleFlag):
         '''Set the BrailleSegment flag.

@@ -51,6 +51,11 @@ class BrailleImage:
             i = cx + (cy * self.char_width)
             return self.__segments[i]
 
+    def fill(self):
+        '''Fill the canvas.'''
+        for segment in self.__segments:
+            segment.fill()
+
     def plot(self, x:int, y:int, *, unplot:bool = False):
         '''Plots the "pixel" residing at (x,y).
         

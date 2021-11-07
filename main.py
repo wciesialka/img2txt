@@ -7,7 +7,9 @@ from typing import TextIO, Callable, BinaryIO
 import sys
 from PIL import Image
 
-def main(input_stream:BinaryIO, output_stream:TextIO, tolerance:float, method:Callable[[int,int,int],float]):
+import AsciiDotter.BrailleSegment as bs
+
+def main(input_stream:BinaryIO, output_stream:TextIO, tolerance:float, method:Callable[[int,int,int],float], inverted:bool):
     '''Perform the main duties of the program. Namely, convert an image into it's braille art equivalent.
     
     :param input_stream: Binary Stream representing input image.
@@ -17,12 +19,17 @@ def main(input_stream:BinaryIO, output_stream:TextIO, tolerance:float, method:Ca
     :param tolerance: Tolerance of luminance in range [0.0, 1.0].
     :type tolerance: float
     :param method: Method to calculate luminance. Should take in r, g, b as parameters and return a float in range [0.0, 1.0].
-    :type method: Callable[[int,int,int], float]'''
+    :type method: Callable[[int,int,int], float]
+    :param inverted: If true, output image will be inverted.
+    :type inverted: bool'''
 
     image = Image.open(input_stream).convert('RGBA')
 
     w,h = image.size
     braille = BrailleImage.BrailleImage(w, h)
+
+    if inverted:
+        braille.fill()
 
     for y in range(h):
         for x in range(w):
@@ -30,7 +37,7 @@ def main(input_stream:BinaryIO, output_stream:TextIO, tolerance:float, method:Ca
             if a > (255//2):
                 lum = method(r,g,b)
                 if lum >= tolerance:
-                    braille.plot(x,y)
+                    braille.plot(x,y,unplot=inverted)
     
     output_stream.write(braille.as_str())
     
@@ -46,6 +53,7 @@ if __name__ == "__main__":
     parser.add_argument("--output","-o",type=argparse.FileType("w"),default=sys.stdout,help="Output stream.")
     parser.add_argument("--tolerance","-t",type=float,default=0.5,help="Luminance tolerance level in range [0.0, 1.0].")
     parser.add_argument("--method","-m",type=str,choices=methods.keys(),default="relative",help="Which method to use for calculating luminance.")
+    parser.add_argument("--invert","-i",action="store_true",help="Invert output image.")
     parser.add_argument("input", type=argparse.FileType("rb"), help="Input image.")
     args = parser.parse_args()
 
@@ -57,9 +65,10 @@ if __name__ == "__main__":
     
     method = methods[args.method]
     image_stream = args.input
+    inverted = args.invert
 
     try:
-        main(image_stream, stream, tolerance, method)
+        main(image_stream, stream, tolerance, method, inverted)
     finally:
         stream.close()
         image_stream.close()

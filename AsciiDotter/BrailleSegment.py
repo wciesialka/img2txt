@@ -39,6 +39,8 @@ class BrailleFlag(Enum):
 class BrailleSegment:
     '''Class representing a 2x4 segment of a BrailleImage. Contains methods for setting and unsetting flags.'''
 
+    __slots__ = '__flags'
+
     def __init__(self):
         self.__flags:int = 0
 

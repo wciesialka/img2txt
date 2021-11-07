@@ -17,7 +17,7 @@ This project was built using Python 3.8.10. A terminal that supports unicode cha
 This is a CLI program. It can be run using `python3 main.py` or `./main.py`. The list of flags are as follows:
 
 ```
-usage: main.py [-h] [--output OUTPUT] [--tolerance TOLERANCE] [--method METHOD] [--invert] input
+usage: main.py [-h] [--output OUTPUT] [--tolerance TOLERANCE] [--method METHOD] [--limit LIMIT] [--invert] input
     -h: Displays help message.
     --output, -o: Output text stream. Optional. Default is sys.stdout.
     --tolerance, -t: Float in range [0.0, 1.0]. Any pixel with a luminance value greater than or equal to this value will be plotted. Default is 0.5.
@@ -26,7 +26,8 @@ usage: main.py [-h] [--output OUTPUT] [--tolerance TOLERANCE] [--method METHOD] 
         "relative", "r": Calculate luminance by using the [relative luminance](https://en.wikipedia.org/wiki/Relative_luminance) formula. Default.
         "value", "v": Calculate luminance by calculating the value of the pixel in HSV space.
         "weighted", "w": Calculate luminance by summing the r, g, and b values weighted by their wavelengths.
-    --invert, -i: Invert output image.
+    --limit, -l: Character limit. Optional. Defaults to 1,048,576.
+    --invert, -i: Invert output image. Optional.
     input: Binary input stream of image. Required. 
 
 ```

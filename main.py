@@ -29,7 +29,7 @@ def main(input_stream:BinaryIO, output_stream:TextIO, tolerance:float, method:Ca
             r, g, b, a = image.getpixel((x,y))
             if a > (255//2):
                 lum = method(r,g,b)
-                if lum > tolerance:
+                if lum >= tolerance:
                     braille.plot(x,y)
     
     output_stream.write(braille.as_str())

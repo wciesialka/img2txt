@@ -16,7 +16,7 @@ def __map(value:float,lower_bound:float,upper_bound:float) -> float:
     
     return (value - lower_bound) * 1.0 / (upper_bound - lower_bound)
 
-def average(r:int, g:int, b:int) -> float:
+def calculate_average(r:int, g:int, b:int) -> float:
     '''Get the luminance of a color in RGB space using the average of the three colors.
     
     :param r: red value.
@@ -32,7 +32,7 @@ def average(r:int, g:int, b:int) -> float:
 
     return __map(avg,0,255)
 
-def relative_luminance(r:int, g:int, b:int) -> float:
+def calculate_luminance(r:int, g:int, b:int) -> float:
     '''Get the luminance of a color in RGB space using the relative luminance formula.
     
     :param r: red value.
@@ -52,3 +52,35 @@ def relative_luminance(r:int, g:int, b:int) -> float:
     y = 0.2126 * r_lin + 0.7152 * g_lin + 0.0722 * b_lin
 
     return __map(y,0,196964.69911399897)
+
+def calculate_value(r:int, g:int, b:int):
+    '''Get the luminance of a color in RGB space by calculating it's value.
+    
+    :param r: red value.
+    :type r: int
+    :param g: green value.
+    :type g: int
+    :param b: blue value.
+    :type b: int
+    
+    :returns Luminance of the color in [0.0, 1.0]
+    :rtype: float'''
+
+    return max(r/255,g/255,b/255)
+
+def calculate_weighted(r:int, g:int, b:int):
+    '''Get the luminance of a color in RGB space by calculating it's weighted luminance. Similar to relative luminance.
+    
+    :param r: red value.
+    :type r: int
+    :param g: green value.
+    :type g: int
+    :param b: blue value.
+    :type b: int
+    
+    :returns Luminance of the color in [0.0, 1.0]
+    :rtype: float'''
+
+    gs = (0.299*r) + (0.587*g) + (0.114*b)
+
+    return __map(gs,0,255)

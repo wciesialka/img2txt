@@ -22,10 +22,10 @@ usage: main.py [-h] [--output OUTPUT] [--tolerance TOLERANCE] [--method METHOD] 
     --output, -o: Output text stream. Optional. Default is sys.stdout.
     --tolerance, -t: Float in range [0.0, 1.0]. Any pixel with a luminance value greater than or equal to this value will be plotted. Default is 0.5.
     --method, -m: Which method to use for determining the luminance value of a pixel. Luminance values are mapped to [0.0, 1.0]. Methods are as follows:
-        "average", "a": Calculate luminance by taking average of r, g, b.
-        "relative", "r": Calculate luminance by using the [relative luminance](https://en.wikipedia.org/wiki/Relative_luminance) formula. Default.
-        "value", "v": Calculate luminance by calculating the value of the pixel in HSV space.
-        "weighted", "w": Calculate luminance by summing the r, g, and b values weighted by their wavelengths.
+        "AVERAGE", "A": Calculate luminance by taking average of r, g, b.
+        "RELATIVE", "R": Calculate luminance by using the [relative luminance](https://en.wikipedia.org/wiki/Relative_luminance) formula. Default.
+        "VALUE", "V": Calculate luminance by calculating the value of the pixel in HSV space.
+        "WEIGHTED", "W": Calculate luminance by summing the r, g, and b values weighted by their wavelengths.
     --limit, -l: Character limit. Optional. Defaults to 1,048,576.
     --invert, -i: Invert output image. Optional.
     input: Binary input stream of image. Required. 

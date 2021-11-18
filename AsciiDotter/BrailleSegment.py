@@ -94,4 +94,4 @@ class BrailleSegment:
 
     def invert(self):
         '''Invert the BrailleSegment.'''
-        self.__flags = self.__flags ^ 0xFF
+        self.__flags = (self.__flags ^ 0xFF) & 0xFF

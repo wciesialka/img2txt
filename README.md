@@ -20,7 +20,7 @@ This project was built using Python 3.8.10. A terminal that supports unicode cha
 
 ### Running
 
-After installation, the program may be run directly by using `asciidotter`, or through the module using `python3 -m AsciiDotter`.
+After installation, the program may be run directly by using `asciidotter`, or through the module using `python3 -m ascii_dotter`.
 
 ```
 usage: asciidotter [-h] [--output OUTPUT] [--tolerance TOLERANCE] [--method METHOD] [--limit LIMIT] [--invert] input

@@ -83,3 +83,15 @@ class BrailleSegment:
         :type flag: BrailleFlag
         '''
         self.__flags = self.__flags & (~flag.value)
+
+    def flag_is_set(self,flag:BrailleFlag) -> bool:
+        '''Return if the BrailleSegment flag is set.
+        :param flag: Flag to check.
+        :type flag: BrailleFlag
+        :returns: True if flag is set, False otherwise.
+        :rtype: bool'''
+        return self.__flags & flag.value == flag.value
+
+    def invert(self):
+        '''Invert the BrailleSegment.'''
+        self.__flags = self.__flags ^ 0xFF

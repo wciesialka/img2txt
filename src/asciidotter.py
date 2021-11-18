@@ -49,9 +49,9 @@ def main(input_stream:BinaryIO, output_stream:TextIO, tolerance:float, method:Lu
     output_stream.write(braille.as_str())
     output_stream.flush()
     
-    
-if __name__ == "__main__":
 
+def cli_entry_point():
+    '''Read and parse arguments, then pass them into main()'''
     methods = Luminance.LuminanceMethod._member_map_.copy() # Gets the name-value pairs of the Enum and copies it into a new dict.
     
     for k in [key for key in methods.keys()]: # this will let us add "shortcut" key-value pairs, i.e. copy the value of each key to a key that is the first letter of the key.
@@ -85,3 +85,6 @@ if __name__ == "__main__":
     finally:
         stream.close()
         image_stream.close()
+    
+if __name__ == "__main__":
+    cli_entry_point()

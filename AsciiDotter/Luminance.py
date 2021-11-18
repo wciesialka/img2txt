@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Callable
 
 def __map(value:float,lower_bound:float,upper_bound:float) -> float:
     '''Map a value that is in the range of [lower bound, upper bound] to [0.0, 1.0].\n
@@ -88,7 +89,7 @@ def calculate_weighted(r:int, g:int, b:int):
 class LuminanceMethods(Enum):
     '''Valid methods for calculating Luminance. Each Enum's value is a Callable(int,int,int) -> float'''
 
-    AVERAGE = calculate_average
-    VALUE = calculate_value
-    WEIGHTED = calculate_weighted
-    RELATIVE = calculate_luminance
+    AVERAGE:Callable[[int,int,int],float] = calculate_average
+    VALUE:Callable[[int,int,int],float] = calculate_value
+    WEIGHTED:Callable[[int,int,int],float] = calculate_weighted
+    RELATIVE:Callable[[int,int,int],float] = calculate_luminance

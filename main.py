@@ -61,7 +61,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Turn an image into a similar rendition using Unicode Braille characters!")
     parser.add_argument("--output","-o",type=argparse.FileType("w"),default=sys.stdout,help="Output stream.")
     parser.add_argument("--tolerance","-t",type=float,default=0.5,help="Luminance tolerance level in range [0.0, 1.0].")
-    parser.add_argument("--method","-m",type=str,choices=methods.keys(),default="AVERAGE",help="Which method to use for calculating luminance.")
+    parser.add_argument("--method","-m",type=str.upper,choices=methods.keys(),default="AVERAGE",help="Which method to use for calculating luminance.")
     parser.add_argument("--invert","-i",action="store_true",help="Invert output image.")
     parser.add_argument("--limit","-l",type=int,default=1048576,help="Character limit.")
     parser.add_argument("input", type=argparse.FileType("rb"), help="Input image.")

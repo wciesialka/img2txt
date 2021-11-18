@@ -49,16 +49,16 @@ def main(input_stream:BinaryIO, output_stream:TextIO, tolerance:float, method:Lu
     output_stream.write(braille.as_str())
     output_stream.flush()
     
-    
-if __name__ == "__main__":
 
+def cli_entry_point():
+    '''Read and parse arguments, then pass them into main()'''
     methods = Luminance.LuminanceMethod._member_map_.copy() # Gets the name-value pairs of the Enum and copies it into a new dict.
     
     for k in [key for key in methods.keys()]: # this will let us add "shortcut" key-value pairs, i.e. copy the value of each key to a key that is the first letter of the key.
         methods[k[0]] = methods[k]            # we have to use list comprehension here because the .keys() function will throw an error due to it being manipulated in the for loop.
                                               # we pass these keys in as choices for the --method flag.
 
-    parser = argparse.ArgumentParser(description="Turn an image into a similar rendition using Unicode Braille characters!")
+    parser = argparse.ArgumentParser(prog="asciidotter", description="Turn an image into a similar rendition using Unicode Braille characters!")
     parser.add_argument("--output","-o",type=argparse.FileType("w"),default=sys.stdout,help="Output stream.")
     parser.add_argument("--tolerance","-t",type=float,default=0.5,help="Luminance tolerance level in range [0.0, 1.0].")
     parser.add_argument("--method","-m",type=str.upper,choices=methods.keys(),default="AVERAGE",help="Which method to use for calculating luminance.")
@@ -85,3 +85,6 @@ if __name__ == "__main__":
     finally:
         stream.close()
         image_stream.close()
+    
+if __name__ == "__main__":
+    cli_entry_point()

@@ -8,16 +8,20 @@ As I write this section of my README, it is 11/6/2021. I worked on this project 
 
 ## Getting Started
 
+### Setup
+
+You may install the project using `python3 setup.py install` or `./setup.py install`.
+
 ### Requirements
 
 This project was built using Python 3.8.10. A terminal that supports unicode characters is recommended, but not required. Please see [requirements.txt](requirements.txt) for module requirements.
 
 ### Running
 
-This is a CLI program. It can be run using `python3 main.py` or `./main.py`. The list of flags are as follows:
+After installation, the program may be run directly by using `asciidotter`, or through the module using `python3 -m AsciiDotter`.
 
 ```
-usage: main.py [-h] [--output OUTPUT] [--tolerance TOLERANCE] [--method METHOD] [--limit LIMIT] [--invert] input
+usage: asciidotter [-h] [--output OUTPUT] [--tolerance TOLERANCE] [--method METHOD] [--limit LIMIT] [--invert] input
     -h: Displays help message.
     --output, -o: Output text stream. Optional. Default is sys.stdout.
     --tolerance, -t: Float in range [0.0, 1.0]. Any pixel with a luminance value greater than or equal to this value will be plotted. Default is 0.5.

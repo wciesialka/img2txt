@@ -86,7 +86,7 @@ def calculate_weighted(r:int, g:int, b:int):
 
     return __map(gs,0,255)
 
-class LuminanceMethods(Enum):
+class LuminanceMethod(Enum):
     '''Valid methods for calculating Luminance. Each Enum's value is a Callable(int,int,int) -> float'''
 
     AVERAGE:Callable[[int,int,int],float] = calculate_average

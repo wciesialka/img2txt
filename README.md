@@ -10,7 +10,9 @@ As I write this section of my README, it is 11/6/2021. I worked on this project 
 
 ### Setup
 
-You may install the project using `python3 setup.py install` or `./setup.py install`.
+There are a few ways of installing this project. It can be found on [PyPI](https://pypi.org/project/AsciiDotter/). This allows you to use `pip install AsciiDotter`.
+
+Alternatively, you may clone the project to your workspace and run `setup.py install` to install.
 
 ### Requirements
 

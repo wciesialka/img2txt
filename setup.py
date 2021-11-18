@@ -21,7 +21,7 @@ content = {
     "packages": find_packages(where="src"),
     "entry_points": {
         'console_scripts': [
-            'asciidotter = AsciiDotter.__main__:cli_entry_point'
+            'asciidotter = ascii_dotter.__main__:cli_entry_point'
         ]
     },
     "classifiers": [

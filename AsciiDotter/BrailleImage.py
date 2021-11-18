@@ -1,6 +1,8 @@
 import AsciiDotter.BrailleSegment as BrailleSegment
 from math import ceil, floor
 from typing import List
+from PIL import Image
+from AsciiDotter.Luminance import LuminanceMethod
 
 class BrailleImage:
 
@@ -10,7 +12,6 @@ class BrailleImage:
         self.__height:int = height
 
         self.__segments:List[BrailleSegment.BrailleSegment] = [BrailleSegment.BrailleSegment() for _ in range(self.char_width * self.char_height)]
-
 
     @property
     def width(self) -> int:
@@ -55,6 +56,11 @@ class BrailleImage:
         '''Fill the canvas.'''
         for segment in self.__segments:
             segment.fill()
+
+    def invert(self):
+        '''Invert the canvas.'''
+        for segment in self.__segments:
+            segment.invert()
 
     def plot(self, x:int, y:int, *, unplot:bool = False):
         '''Plots the "pixel" residing at (x,y).

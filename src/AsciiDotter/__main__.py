@@ -58,7 +58,7 @@ def cli_entry_point():
         methods[k[0]] = methods[k]            # we have to use list comprehension here because the .keys() function will throw an error due to it being manipulated in the for loop.
                                               # we pass these keys in as choices for the --method flag.
 
-    parser = argparse.ArgumentParser(description="Turn an image into a similar rendition using Unicode Braille characters!")
+    parser = argparse.ArgumentParser(prog="asciidotter", description="Turn an image into a similar rendition using Unicode Braille characters!")
     parser.add_argument("--output","-o",type=argparse.FileType("w"),default=sys.stdout,help="Output stream.")
     parser.add_argument("--tolerance","-t",type=float,default=0.5,help="Luminance tolerance level in range [0.0, 1.0].")
     parser.add_argument("--method","-m",type=str.upper,choices=methods.keys(),default="AVERAGE",help="Which method to use for calculating luminance.")

@@ -1,6 +1,11 @@
+from __future__ import annotations
 import AsciiDotter.BrailleSegment as BrailleSegment
 from math import ceil, floor
 from typing import List
+from PIL import Image
+from AsciiDotter.Luminance import LuminanceMethod
+
+ALPHA_TOLERANCE:int = 255//2
 
 class BrailleImage:
 
@@ -11,6 +16,29 @@ class BrailleImage:
 
         self.__segments:List[BrailleSegment.BrailleSegment] = [BrailleSegment.BrailleSegment() for _ in range(self.char_width * self.char_height)]
 
+    @classmethod
+    def from_image(cls,img:Image.Image,tolerance:float,method:LuminanceMethod) -> BrailleImage:
+        '''Return a BrailleImage constructed from an Image.
+        :param img: Source image.
+        :type img: Image
+        :param tolerance: Luminance tolerance.
+        :type tolerance: float
+        :param method: Method used to calculate luminance.
+        :type method: LuminanceMethod
+        :returns: Constructed BrailleImage.
+        :rtype: BrailleImage'''
+        w, h = img.size
+        braille = cls(w,h)
+
+        for y in range(h):
+            for x in range(w):
+                r, g, b, a = img.getpixel((x,y))
+                if a >= ALPHA_TOLERANCE:
+                    lum = method.value(r,g,b)
+                    if lum >= tolerance:
+                        braille.plot(x,y)
+
+        return braille
 
     @property
     def width(self) -> int:
@@ -55,6 +83,11 @@ class BrailleImage:
         '''Fill the canvas.'''
         for segment in self.__segments:
             segment.fill()
+
+    def invert(self):
+        '''Invert the canvas.'''
+        for segment in self.__segments:
+            segment.invert()
 
     def plot(self, x:int, y:int, *, unplot:bool = False):
         '''Plots the "pixel" residing at (x,y).

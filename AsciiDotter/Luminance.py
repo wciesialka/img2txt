@@ -1,4 +1,4 @@
-
+from enum import Enum
 
 def __map(value:float,lower_bound:float,upper_bound:float) -> float:
     '''Map a value that is in the range of [lower bound, upper bound] to [0.0, 1.0].\n
@@ -84,3 +84,11 @@ def calculate_weighted(r:int, g:int, b:int):
     gs = (0.299*r) + (0.587*g) + (0.114*b)
 
     return __map(gs,0,255)
+
+class LuminanceMethods(Enum):
+    '''Valid methods for calculating Luminance. Each Enum's value is a Callable(int,int,int) -> float'''
+
+    AVERAGE = calculate_average
+    VALUE = calculate_value
+    WEIGHTED = calculate_weighted
+    RELATIVE = calculate_luminance

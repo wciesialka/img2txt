@@ -47,6 +47,7 @@ def main(input_stream:BinaryIO, output_stream:TextIO, tolerance:float, method:Lu
         braille.invert()
     
     output_stream.write(braille.as_str())
+    output_stream.flush()
     
     
 if __name__ == "__main__":

@@ -41,7 +41,7 @@ usage: asciidotter [-h] [--output OUTPUT] [--tolerance TOLERANCE] [--method METH
  
  ## Authors
  
- - Will Ciesialka
+ - Willow Ciesialka
 
  ## License
 

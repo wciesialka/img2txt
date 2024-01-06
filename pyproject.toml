@@ -1,3 +1,23 @@
 [build-system]
 requires = ["setuptools"]
-system = 
+system = "setuptools.build_meta"
+
+[project]
+name = "img2txt"
+authors = [
+    {name = "Willow Ciesialka", email="wciesialka@gmail.com"}
+]
+requires-python = ">=3.10"
+description = "Convert an image to text."
+dynamic = ["version", "readme", "dependencies"]
+
+[project.scripts]
+img2txt = "img2txt:__main__.main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.dynamic]
+version = {attr = "img2txt.__version__"}
+readme = {file = ["README.md"], content-type = "text/markdown"}
+dependencies = {file = ["requirements.txt"]}

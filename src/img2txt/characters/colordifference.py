@@ -1,4 +1,6 @@
-'''Module useful for determining differences between colors. 
+'''Module useful for determining differences between colors.
+
+:author: Willow Ciesialka
 '''
 
 from typing import Tuple, Dict, List, Any

@@ -1,6 +1,3 @@
-from collections import namedtuple
-from enum import Enum
-
 class FourBitAnsiColor:
 
     __slots__ = ("__fg_code", "__bg_code", "__rgb")
@@ -13,38 +10,41 @@ class FourBitAnsiColor:
     @property
     def bg_code(self):
         return self.__bg_code
-    
+
     @property
     def fg_code(self):
         return self.__fg_code
-    
+
     @property
     def rgb(self):
         return self.__rgb
 
     def fg(self):
         return f"\033[{self.fg_code}m"
-    
+
     def bg(self):
         return f"\033[{self.bg_code}m"
 
-FOUR_BIT_ANSI = [None] * 16
-FOUR_BIT_ANSI[0] = FourBitAnsiColor(30, 40, (0,0,0))
-FOUR_BIT_ANSI[1] = FourBitAnsiColor(31, 41, (170, 0, 0))
-FOUR_BIT_ANSI[2] = FourBitAnsiColor(32, 42, (0, 170, 0))
-FOUR_BIT_ANSI[3] = FourBitAnsiColor(33, 43, (128, 128, 0))
-FOUR_BIT_ANSI[4] = FourBitAnsiColor(34, 44, (0, 0, 170))
-FOUR_BIT_ANSI[5] = FourBitAnsiColor(35, 45, (170, 0, 170))
-FOUR_BIT_ANSI[6] = FourBitAnsiColor(36, 46, (0, 170, 170))
-FOUR_BIT_ANSI[7] = FourBitAnsiColor(37, 47, (170, 170, 170))
-FOUR_BIT_ANSI[8] = FourBitAnsiColor(90, 100, (85, 85, 85))
-FOUR_BIT_ANSI[9] = FourBitAnsiColor(91, 101, (255, 85, 85))
-FOUR_BIT_ANSI[10] = FourBitAnsiColor(92, 102, (85, 255, 85))
-FOUR_BIT_ANSI[11] = FourBitAnsiColor(93, 103, (255, 255, 85))
-FOUR_BIT_ANSI[12] = FourBitAnsiColor(94, 104, (85, 85, 255))
-FOUR_BIT_ANSI[13] = FourBitAnsiColor(95, 105, (255, 85, 255))
-FOUR_BIT_ANSI[14] = FourBitAnsiColor(96, 106, (85, 255, 255))
-FOUR_BIT_ANSI[15] = FourBitAnsiColor(97, 107, (255, 255, 255))
+ANSI_RESET = "\033[0m"
+
+__FOUR_BIT_ANSI = [None] * 16
+__FOUR_BIT_ANSI[0] = FourBitAnsiColor(30, 40, (0,0,0))
+__FOUR_BIT_ANSI[1] = FourBitAnsiColor(31, 41, (170, 0, 0))
+__FOUR_BIT_ANSI[2] = FourBitAnsiColor(32, 42, (0, 170, 0))
+__FOUR_BIT_ANSI[3] = FourBitAnsiColor(33, 43, (128, 128, 0))
+__FOUR_BIT_ANSI[4] = FourBitAnsiColor(34, 44, (0, 0, 170))
+__FOUR_BIT_ANSI[5] = FourBitAnsiColor(35, 45, (170, 0, 170))
+__FOUR_BIT_ANSI[6] = FourBitAnsiColor(36, 46, (0, 170, 170))
+__FOUR_BIT_ANSI[7] = FourBitAnsiColor(37, 47, (170, 170, 170))
+__FOUR_BIT_ANSI[8] = FourBitAnsiColor(90, 100, (85, 85, 85))
+__FOUR_BIT_ANSI[9] = FourBitAnsiColor(91, 101, (255, 85, 85))
+__FOUR_BIT_ANSI[10] = FourBitAnsiColor(92, 102, (85, 255, 85))
+__FOUR_BIT_ANSI[11] = FourBitAnsiColor(93, 103, (255, 255, 85))
+__FOUR_BIT_ANSI[12] = FourBitAnsiColor(94, 104, (85, 85, 255))
+__FOUR_BIT_ANSI[13] = FourBitAnsiColor(95, 105, (255, 85, 255))
+__FOUR_BIT_ANSI[14] = FourBitAnsiColor(96, 106, (85, 255, 255))
+__FOUR_BIT_ANSI[15] = FourBitAnsiColor(97, 107, (255, 255, 255))
+FOUR_BIT_ANSI = tuple(__FOUR_BIT_ANSI)
 
 class EightBitAnsiColor:
 
@@ -68,22 +68,24 @@ class EightBitAnsiColor:
     def bg(self):
         return f"\033[48;5;{self.code}m"
 
-EIGHT_BIT_ANSI = [None] * 256
+__EIGHT_BIT_ANSI = [None] * 256
 for i, value in enumerate(FOUR_BIT_ANSI):
-    EIGHT_BIT_ANSI[i] = value.rgb
+    __EIGHT_BIT_ANSI[i] = value.rgb
 for value in range(216):
-    red = (value & 0xE0) >> 5
-    green = (value & 0x1C) >> 2
-    blue = (value & 0x03)
+    __red = (value & 0xE0) >> 5
+    __green = (value & 0x1C) >> 2
+    __blue = (value & 0x03)
     # scale
-    red = (red * 255) // 7
-    green = (green * 255) // 7
-    blue = (blue * 255) // 3
-    EIGHT_BIT_ANSI[value + 16] = (red, green, blue)
+    __red = (__red * 255) // 7
+    __green = (__green * 255) // 7
+    __blue = (__blue * 255) // 3
+    __EIGHT_BIT_ANSI[value + 16] = (__red, __green, __blue)
 for value in range(24):
-    offset = 0xA * value
-    grayscale = (8 + offset, 8 + offset, 8 + offset)
-    EIGHT_BIT_ANSI[value + 16 + 216] = offset
+    __offset = 0xA * value
+    __grayscale = (8 + __offset, 8 + __offset, 8 + __offset)
+    __EIGHT_BIT_ANSI[value + 16 + 216] = __offset
+
+EIGHT_BIT_ANSI = tuple(__EIGHT_BIT_ANSI)
 
 class TrueColorAnsi:
 

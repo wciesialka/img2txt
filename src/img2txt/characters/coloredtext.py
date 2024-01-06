@@ -1,4 +1,5 @@
 import img2txt.characters.colors as colors
+from img2txt.characters.colordifference import find_nearest_color_neighbor
 
 class ColoredText:
 
@@ -31,3 +32,41 @@ class ColoredText:
         if (new_color[0] < 0 or new_color[0] > 255) or (new_color[1] < 0 or new_color[1] > 255) or (new_color[2] < 0 or new_color[2] > 255):
             raise ValueError("color bands should be between 0-255.")
         self.__color = new_color
+    
+    def html(self) -> str:
+        '''Get text representation in HTML
+
+        :return: Text representation in HTML.
+        :rtype: str
+        '''
+        # Find nearest named color
+        name, _ = find_nearest_color_neighbor(self.color, colors.NAMED_COLORS)
+        return f"<span style=\"color: {name};\">{self.text}</span>"
+    
+    def four_bit_ansi(self) -> str:
+        '''Get text representation using four-bit ANSI.
+
+        :return: Text representation in four-bit ANSI.
+        :rtype: str
+        '''
+        # Find nearest four-bit ANSI color.
+        index, _ = find_nearest_color_neighbor(self.color, [ansi.rgb for ansi in colors.FOUR_BIT_ANSI])
+        return colors.FOUR_BIT_ANSI[index].fg() + self.text + colors.ANSI_RESET
+
+    def eight_bit_ansi(self) -> str:
+        '''Get text representation using eight-bit ANSI.
+
+        :return: Text representation in eight-bit ANSI.
+        :rtype: str
+        '''
+        index, _ = find_nearest_color_neighbor(self.color, [ansi.rgb for ansi in colors.EIGHT_BIT_ANSI])
+        return colors.EIGHT_BIT_ANSI[index].fg() + self.text + colors.ANSI_RESET
+    
+    def true_color_ansi(self) -> str:
+        '''Get text representation using "true-color" (24-bit) ANSI.
+
+        :return: Text representaiton using true-color ANSI.
+        :rtype: str
+        '''
+        ansi = colors.TrueColorAnsi(self.color)
+        return ansi.fg() + self.text + colors.ANSI_RESET

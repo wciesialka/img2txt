@@ -1,3 +1,6 @@
+'''Module useful for determining differences between colors. 
+'''
+
 from typing import Tuple, Dict, List, Any
 from math import atan2, radians, cos, sin, exp, inf
 

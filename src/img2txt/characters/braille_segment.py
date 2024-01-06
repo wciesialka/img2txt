@@ -1,5 +1,7 @@
 '''
-Module containing BrailleFlag and BrailleSegment classesw.
+Module containing BrailleFlag and BrailleSegment classes.
+
+:author: Willow Ciesialka
 '''
 
 from __future__ import annotations

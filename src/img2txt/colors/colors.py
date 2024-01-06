@@ -1,3 +1,7 @@
+'''Module containing common color constants.
+
+:author: Willow Ciesialka'''
+
 class FourBitAnsiColor:
 
     __slots__ = ("__fg_code", "__bg_code", "__rgb")

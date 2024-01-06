@@ -1,4 +1,8 @@
-import img2txt.characters.colors as colors
+'''Module containing functionality for colored text.
+
+:author: Willow Ciesialka'''
+
+import img2txt.colors.colors as colors
 from img2txt.characters.colordifference import find_nearest_color_neighbor
 
 class ColoredText:

@@ -79,4 +79,4 @@ class ColoredText:
         return f"{self.__class__.__name__}({self.__text}, {self.__color})"
 
     def __str__(self) -> str:
-        return self.true_color_ansi()
+        return self.text

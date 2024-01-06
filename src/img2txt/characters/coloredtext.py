@@ -3,7 +3,7 @@
 :author: Willow Ciesialka'''
 
 import img2txt.colors.colors as colors
-from img2txt.characters.colordifference import find_nearest_color_neighbor
+from img2txt.colors.colordifference import find_nearest_color_neighbor
 
 class ColoredText:
 
@@ -74,3 +74,9 @@ class ColoredText:
         '''
         ansi = colors.TrueColorAnsi(self.color)
         return ansi.fg() + self.text + colors.ANSI_RESET
+
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}({self.__text}, {self.__color})"
+
+    def __str__(self) -> str:
+        return self.true_color_ansi()

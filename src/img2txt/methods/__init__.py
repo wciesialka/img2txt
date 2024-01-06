@@ -8,3 +8,5 @@ import img2txt.methods.colors as colors
 
 THRESHOLD_METHODS = {}
 THRESHOLD_METHODS["luminance_filter"] = threshold.luminance_filter
+
+COLOR_METHODS = {"none": None}

@@ -1,11 +1,12 @@
-'''Module containing the BrailleImage class.'''
+'''Module containing the BrailleImage class.
+
+:author: Willow Ciesialka'''
 
 from __future__ import annotations
 from math import ceil, floor
 from typing import List
-from PIL import Image
-from ascii_dotter.braille_segment import BrailleFlag, BrailleSegment
-from ascii_dotter.luminance import LuminanceMethod
+from PIL.Image import Image
+from img2txt.characters.braillesegment import BrailleSegment, BrailleFlag
 
 ALPHA_TOLERANCE: int = 255//2
 
@@ -20,15 +21,14 @@ class BrailleImage:
             [BrailleSegment() for _ in range(self.char_width * self.char_height)]
 
     @classmethod
-    def from_image(cls, img: Image.Image, tolerance: float,\
-         method: LuminanceMethod) -> BrailleImage:
+    def from_image(cls, img: Image, tolerance: float,\
+         method) -> BrailleImage:
         '''Return a BrailleImage constructed from an Image.
         :param img: Source image.
         :type img: Image
         :param tolerance: Luminance tolerance.
         :type tolerance: float
         :param method: Method used to calculate luminance.
-        :type method: LuminanceMethod
         :returns: Constructed BrailleImage.
         :rtype: BrailleImage'''
         width, height = img.size

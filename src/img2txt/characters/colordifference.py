@@ -1,5 +1,5 @@
-from typing import Tuple
-from math import atan2, radians, cos, sin, exp
+from typing import Tuple, Dict, List, Any
+from math import atan2, radians, cos, sin, exp, inf
 
 def inverse_srgb_companding(v: float) -> float:
     '''Inverse srgb companding used for rgb->xyz conversions.
@@ -147,6 +147,9 @@ def ciede2000(lab_1: Tuple[float, float, float], lab_2: Tuple[float, float, floa
     delta_E = (delta_E_a + delta_E_b + delta_E_c + delta_E_d)**0.5
     return delta_E
 
+
+difference_lookup = {}
+
 def color_difference(rgb_1: Tuple[int, int, int], rgb_2: Tuple[int, int, int]) -> float:
     '''Return the difference between two colors in RGB colorspace.
 
@@ -157,6 +160,47 @@ def color_difference(rgb_1: Tuple[int, int, int], rgb_2: Tuple[int, int, int]) -
     :return: Color difference.
     :rtype: float
     '''
+    # Check in lookup table first.
+    hash_1 = rgb_1[0] << 16 | rgb_1[1] << 8 | rgb_1[2]
+    hash_2 = rgb_2[0] << 16 | rgb_2[1] << 8 | rgb_2[2]
+    lookup_a = min(hash_1, hash_2)
+    lookup_b = max(hash_1, hash_2)
+    if lookup_a in difference_lookup:
+        if lookup_b in difference_lookup[lookup_a]:
+            return difference_lookup[lookup_a][lookup_b]
+    else:
+        difference_lookup[lookup_a] = {}
+
     lab_1 = rgb_to_lab(rgb_1)
     lab_2 = rgb_to_lab(rgb_2)
-    return color_difference(lab_1, lab_2)
+    c_diff = color_difference(lab_1, lab_2)
+    difference_lookup[lookup_a][lookup_b] = c_diff
+    return c_diff
+
+def find_nearest_color_neighbor(color: Tuple[int, int, int], population: Tuple | List | Dict) -> Tuple[Any, Tuple[int, int, int]]:
+    '''Find the nearest color in a population of colors in RGB colorspace.
+
+    :param color: Color to find neighbor of.
+    :type color: Tuple[int, int, int]
+    :param population: Population of colors. If dict, keys used as indices.
+    :type population: Tuple | List | Dict
+    :return: Tuple containing indice found and nearest color.
+    :rtype: Tuple[Any, Tuple[int, int, int]]
+    '''
+    enumerable = None
+    if isinstance(population, dict):
+        enumerable = population.items()
+    elif isinstance(population, list | tuple):
+        enumerable = enumerate(population)
+    else:
+        raise TypeError(f"population must be type tuple, list, or dict, not type {population.__class__.__name__}")
+    
+    min_difference = inf
+    key_value = None
+    for index, compare_color in enumerable:
+        difference = color_difference(color, compare_color)
+        if difference < min_difference:
+            min_difference = difference
+            key_value = index
+    
+    return (key_value, population[key_value])

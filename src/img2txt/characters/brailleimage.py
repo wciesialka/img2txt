@@ -1,11 +1,14 @@
-'''Module containing the BrailleImage class.'''
+'''Module containing the BrailleImage class.
+
+:author: Willow Ciesialka'''
 
 from __future__ import annotations
 from math import ceil, floor
-from typing import List
-from PIL import Image
-from ascii_dotter.braille_segment import BrailleFlag, BrailleSegment
-from ascii_dotter.luminance import LuminanceMethod
+from typing import List, Tuple
+from os import linesep
+from PIL.Image import Image
+from img2txt.characters.braillesegment import BrailleSegment, BrailleFlag
+from img2txt.methods.colors import ColoredTextFormatter
 
 ALPHA_TOLERANCE: int = 255//2
 
@@ -20,15 +23,13 @@ class BrailleImage:
             [BrailleSegment() for _ in range(self.char_width * self.char_height)]
 
     @classmethod
-    def from_image(cls, img: Image.Image, tolerance: float,\
-         method: LuminanceMethod) -> BrailleImage:
+    def from_image(cls, img: Image, method, *, tolerance: float = 0.5, invert: bool = False) -> BrailleImage:
         '''Return a BrailleImage constructed from an Image.
         :param img: Source image.
         :type img: Image
         :param tolerance: Luminance tolerance.
         :type tolerance: float
         :param method: Method used to calculate luminance.
-        :type method: LuminanceMethod
         :returns: Constructed BrailleImage.
         :rtype: BrailleImage'''
         width, height = img.size
@@ -38,9 +39,8 @@ class BrailleImage:
             for x in range(width):
                 red, green, blue, alpha = img.getpixel((x, y))
                 if alpha >= ALPHA_TOLERANCE:
-                    lum = method.value(red, green, blue)
-                    if lum >= tolerance:
-                        braille.plot(x, y)
+                    if method((red, green, blue), tolerance=tolerance, invert=invert):
+                        braille.plot(x, y, (red, green, blue))
 
         return braille
 
@@ -84,17 +84,7 @@ class BrailleImage:
             i = char_x + (char_y * self.char_width)
             return self.__segments[i]
 
-    def fill(self):
-        '''Fill the canvas.'''
-        for segment in self.__segments:
-            segment.fill()
-
-    def invert(self):
-        '''Invert the canvas.'''
-        for segment in self.__segments:
-            segment.invert()
-
-    def plot(self, x: int, y: int, *, unplot: bool = False):
+    def plot(self, x: int, y: int, color: Tuple[int, int, int] = None, *, unplot: bool = False):
         '''Plots the "pixel" residing at (x, y).
         :param x: x-coordinate to plot at.
         :type x: int
@@ -113,22 +103,26 @@ class BrailleImage:
         if unplot:
             segment.unset_flag(flag)
         else:
-            segment.set_flag(flag)
+            if color is None:
+                raise ValueError("Cannot plot without setting color!")
+            segment.set_flag(flag, color)
+    
+    def get_colored_text(self, formatter: ColoredTextFormatter) -> str:
+        '''Return string representation of colored text.
 
-    def __repr__(self):
-        return f"BrailleImage({self.width}, {self.height}, list[BrailleSegment])"
-
-    def as_str(self) -> str:
-        '''Depict image as string.
-        :returns: The complete image.
-        :rtype: str'''
+        :param formatter: Appropriate formatter for display method.
+        :type formatter: ColoredTextFormatter
+        :return: String containing the formatted colored text.
+        :rtype: str
+        '''
         return_string = ""
         for i, segment in enumerate(self.__segments):
             if i > 0 and i % self.char_width == 0:
-                return_string += "\n"
-            return_string += segment.as_char()
+                return_string += linesep
+            segment_text = segment.as_colored_text()
+            return_string += formatter.format(segment_text)
         return return_string
 
 
-    def __str__(self):
-        return self.as_str()
+    def __repr__(self):
+        return f"BrailleImage({self.width}, {self.height}, list[BrailleSegment])"

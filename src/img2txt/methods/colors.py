@@ -6,7 +6,7 @@
 from abc import abstractmethod
 from img2txt.characters.coloredtext import ColoredText
 
-class ColoredTextVisitor:
+class ColoredTextFormatter:
 
     @staticmethod
     @abstractmethod
@@ -14,36 +14,36 @@ class ColoredTextVisitor:
         pass
 
     @classmethod
-    def print(cls, colored_text: ColoredText):
+    def format(cls, colored_text: ColoredText) -> str:
         if not isinstance(colored_text, ColoredText):
             raise TypeError(f"colored_text should be of type ColoredText, not type {colored_text.__class__.__name__}")
         cls._visit(colored_text)
 
-class FourBitAnsiVisitor(ColoredTextVisitor):
+class FourBitAnsiFormatter(ColoredTextFormatter):
 
     @staticmethod
     def _visit(colored_text: ColoredText):
         return colored_text.four_bit_ansi()
 
-class EightBitAnsiVisitor(ColoredTextVisitor):
+class EightBitAnsiFormatter(ColoredTextFormatter):
 
     @staticmethod
     def _visit(colored_text: ColoredText):
         return colored_text.eight_bit_ansi()
 
-class TrueColorAnsiVisitor(ColoredTextVisitor):
+class TrueColorAnsiFormatter(ColoredTextFormatter):
 
     @staticmethod
     def _visit(colored_text: ColoredText):
         return colored_text.true_color_ansi()
 
-class HTMLVisitor(ColoredTextVisitor):
+class HTMLFormatter(ColoredTextFormatter):
 
     @staticmethod
     def _visit(colored_text: ColoredText):
         return colored_text.html()
 
-class PlaintextVisitor(ColoredTextVisitor):
+class PlaintextFormatter(ColoredTextFormatter):
 
     @staticmethod
     def _visit(colored_text: ColoredText):

@@ -1,2 +1,2 @@
-__version__ = "2024.01.06"
+__version__ = "2024.01.07"
 __authors__ = ["Willow Ciesialka"]

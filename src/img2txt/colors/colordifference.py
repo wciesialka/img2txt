@@ -50,7 +50,7 @@ def xyz_to_lab(xyz: Tuple[float, float, float]) -> Tuple[float, float, float]:
     y = y if y > 0.008856 else (903.3 * y + 16.0) / 116.0
     z = z if z > 0.008856 else (903.3 * z + 16.0) / 116.0
 
-    l = max(0.0, 116.0 * y - 16.0)
+    l = min(100.0, max(0.0, 116.0 * y - 16.0))
     a = (x - y) * 500.0
     b = (y - z) * 200.0
 

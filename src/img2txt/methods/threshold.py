@@ -14,7 +14,7 @@ def threshold_method(method):
         if tolerance > 1 or tolerance < 0:
             raise ValueError("tolerance must be between [0.0, 1.0].")
         value = method(*args, **kwargs)
-        return bool((value <= tolerance) ^ invert)
+        return bool((value < tolerance) ^ invert)
     return threshold_method_decorator
 
 @threshold_method

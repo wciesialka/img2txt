@@ -69,7 +69,7 @@ class BrailleSegment:
         total_green = 0 
         total_blue = 0
         total_segments = 0
-        for bit, color in self.__colors.items():
+        for color in self.__colors.values():
             if color is None:
                 continue
             total_red += color[0]
@@ -95,7 +95,10 @@ class BrailleSegment:
     def copy(self) -> BrailleSegment:
         '''Return a copy of the BrailleSegment.'''
         new_copy = BrailleSegment()
-        new_copy.__flags = self.__flags
+        for flag, color in self.__colors.items():
+            if color is None:
+                continue
+            new_copy.set_flag(flag, color)
         return new_copy
 
     def fill(self, color: Tuple[int, int, int]):

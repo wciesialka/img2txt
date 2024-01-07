@@ -6,18 +6,6 @@
 from typing import Tuple, Dict, List, Any
 from math import atan2, radians, cos, sin, exp, inf, degrees
 
-def inverse_srgb_companding(v: float) -> float:
-    '''Inverse srgb companding used for rgb->xyz conversions.
-
-    :param v: rgb band value
-    :type v: float
-    :return: Resulting value
-    :rtype: float
-    '''
-    if v <= 0.04045:
-        return v/12.92
-    return ((v+0.055)/1.055)**2.4
-
 def rgb_to_xyz(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
     '''Convert a color in RGB space to XYZ space
 
@@ -31,9 +19,17 @@ def rgb_to_xyz(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
     g = float(rgb[1]) / 255.0
     b = float(rgb[2]) / 255.0
 
-    x = inverse_srgb_companding(r)
-    y = inverse_srgb_companding(g)
-    z = inverse_srgb_companding(b)
+    # Apply gamma correction if needed
+    r = (r / 12.92) if (r <= 0.04045) else ((r + 0.055) / 1.055) ** 2.4
+    g = (g / 12.92) if (g <= 0.04045) else ((g + 0.055) / 1.055) ** 2.4
+    b = (b / 12.92) if (b <= 0.04045) else ((b + 0.055) / 1.055) ** 2.4
+
+    # Apply the RGB to XYZ conversion matrix
+    x = r * 0.4124564 + g * 0.3575761 + b * 0.1804375
+    y = r * 0.2126729 + g * 0.7151522 + b * 0.0721750
+    z = r * 0.0193339 + g * 0.1191920 + b * 0.9503041
+
+    return (x * 100.0, y * 100.0, z * 100.0)
 
     return (x, y, z)
 
@@ -45,39 +41,20 @@ def xyz_to_lab(xyz: Tuple[float, float, float]) -> Tuple[float, float, float]:
     :return: Color in L*ab colorspace
     :rtype: Tuple[float, float, float]
     '''
-    reference = (95.0489, 100.0, 108.8840) # Standard Illuminant D65 
+    x = xyz[0] / 95.047
+    y = xyz[1] / 100.000
+    z = xyz[2] / 108.883
 
-    kappa = 24389.0/27.0    # CIE standard
-    epsilon = 216.0/24389.0
-    z_r = xyz[2] / reference[2]
-    y_r = xyz[1] / reference[1]
-    x_r = xyz[0] / reference[0]
-    f_z = 0.0
-    f_y = 0.0
-    f_x = 0.0
+    # Apply the XYZ to LAB conversion
+    x = x if x > 0.008856 else (903.3 * x + 16.0) / 116.0
+    y = y if y > 0.008856 else (903.3 * y + 16.0) / 116.0
+    z = z if z > 0.008856 else (903.3 * z + 16.0) / 116.0
 
-    # Calculate f_x
-    if x_r > epsilon:
-        f_x = (kappa*x_r + 16.0) / 116.0
-    else:
-        f_x = x_r ** (1.0/3.0)
+    l = max(0.0, 116.0 * y - 16.0)
+    a = (x - y) * 500.0
+    b = (y - z) * 200.0
 
-    # Calculate f_y
-    if y_r > epsilon:
-        f_y = (kappa*y_r + 16.0) / 116.0
-    else:
-        f_y = y_r ** (1.0/3.0)
-    
-    if z_r > epsilon:
-        f_z = (kappa*z_r + 16.0) / 116.0
-    else:
-        f_z = z_r ** (1.0/3.0)
-
-    L = 116.0 * f_y - 16.0
-    a = 500.0 * (f_x - f_y)
-    b = 200.0 * (f_y - f_z)
-
-    return (L, a, b)
+    return (l, a, b)
 
 def rgb_to_lab(rgb: Tuple[int, int, int]) -> Tuple[float, float, float]:
     '''Convert a color in RGB space to L*ab space.

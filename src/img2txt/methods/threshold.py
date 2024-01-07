@@ -3,37 +3,46 @@
 :author: Willow Ciesialka
 '''
 
-from typing import List, Tuple
+from typing import Tuple
+from img2txt.colors.colordifference import rgb_to_lab
 
-def luminance_filter(pixels: List[Tuple[float, float, float]], *, tolerance: float = 0.5, invert: bool = False) -> List[Tuple[float, float, float]]:
-    '''Filter a list of pixels by luminance.
-
-    :param pixels: Pixels to filter.
-    :type pixels: List[Tuple[float, float, float]]
-    :param tolerance: Tolerance limit, defaults to 0.5
-    :type tolerance: float, optional
-    :param invert: Invert flag, defaults to False
-    :type invert: bool, optional
-    :raises ValueError: Tolerance filter is not [0.0, 1.0]
-    :raises TypeError: Pixels are not a list.
-    :return: Filtered pixels to look at.
-    :rtype: List[Tuple[float, float, float]]
+def threshold_method(method):
+    '''Decorator for threshold methods. Gets result of luminance and compares it
+    to tolerance. Then, inverts if necessary.
     '''
-    if tolerance > 1 or tolerance < 0:
-        raise ValueError("Tolerance filter must be between [0.0, 1.0].")
-    if not isinstance(pixels, list):
-        raise TypeError("Data to filter must be list.")
+    def threshold_method_decorator(*args, tolerance: float = 0.5, invert: bool = False, **kwargs):
+        if tolerance > 1 or tolerance < 0:
+            raise ValueError("tolerance must be between [0.0, 1.0].")
+        value = method(*args, **kwargs)
+        return bool((value <= tolerance) ^ invert)
+    return threshold_method_decorator
 
-    # Pixel to look at will be on top.
-    pixel = pixels[0]
+@threshold_method
+def luminance_method(pixel: Tuple[int, int, int]) -> float:
+    '''Get the luminance of the pixel.
 
+    :param pixel: RGB to get luminance value from.
+    :type pixel: Tuple[int, int, int]
+    :return: Luminance value
+    :rtype: float
+    '''
+    r = pixel[0] / 255.0
+    g = pixel[1] / 255.0
+    b = pixel[2] / 255.0
     # If luminance is less (more if invert) than threshold, add to list.
     # Otherwise, add None. 
-    luminance = ( .299 * (pixel[0]**2) + .587 * (pixel[1]**2) + .114 * (pixel[2]**2) )
-    result = None
-    if (luminance < tolerance) ^ invert:
-        result = pixel
+    luminance = ( .299 * (r**2) + .587 * (g**2) + .114 * (b**2) )
+    return luminance
 
-    if len(pixels) > 1:
-        return [result] + luminance_filter(pixels[1:], tolerance=tolerance, invert=invert)
-    return [result]
+@threshold_method
+def lightness_method(pixel: Tuple[int, int, int]) -> float:
+    '''Get the perceptual lightness of the pixel.
+
+    :param pixel: RGB values of pixel.
+    :type pixel: Tuple[int, int, int]
+    :return: Perceptual lightness of pixel.
+    :rtype: float
+    '''
+    lab = rgb_to_lab(pixel)
+    lightness = lab[0] / 100.0
+    return lightness

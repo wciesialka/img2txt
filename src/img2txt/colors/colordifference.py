@@ -50,7 +50,7 @@ def xyz_to_lab(xyz: Tuple[float, float, float]) -> Tuple[float, float, float]:
     y = y if y > 0.008856 else (903.3 * y + 16.0) / 116.0
     z = z if z > 0.008856 else (903.3 * z + 16.0) / 116.0
 
-    l = max(0.0, 116.0 * y - 16.0)
+    l = min(100.0, max(0.0, 116.0 * y - 16.0))
     a = (x - y) * 500.0
     b = (y - z) * 200.0
 
@@ -130,7 +130,7 @@ def ciede2000(lab_1: Tuple[float, float, float], lab_2: Tuple[float, float, floa
     delta_E_c = (delta_H_Prime / (K_H*S_H))**2
     delta_E_d = R_T * (delta_C_Prime / (K_C * S_C)) * (delta_H_Prime / (K_H * S_H))
     delta_E = (delta_E_a + delta_E_b + delta_E_c + delta_E_d)**0.5
-    return min(100.0, max(0.0, delta_E))
+    return delta_E
 
 def redmean(rgb_1: Tuple[int, int, int], rgb_2: Tuple[int, int, int]) -> float:
     '''Return the euclidean difference between two colors in RGB colorspace using the redmean method.

@@ -76,13 +76,9 @@ __EIGHT_BIT_ANSI = [None] * 256
 for i, value in enumerate(FOUR_BIT_ANSI):
     __EIGHT_BIT_ANSI[i] = EightBitAnsiColor(i, value.rgb)
 for value in range(216):
-    __red = (value & 0xE0) >> 5
-    __green = (value & 0x1C) >> 2
-    __blue = (value & 0x03)
-    # scale
-    __red = (__red * 255) // 7
-    __green = (__green * 255) // 7
-    __blue = (__blue * 255) // 3
+    __red = int((value / 36) * 51)
+    __green = int(((value % 36) / 6) * 51)
+    __blue = int(((value % 6) / 1) * 51)
     __rgb = (__red, __green, __blue)
     __EIGHT_BIT_ANSI[value + 16] = EightBitAnsiColor(value + 16, __rgb)
 for value in range(24):

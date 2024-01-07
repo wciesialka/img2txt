@@ -17,7 +17,7 @@ class ColoredTextFormatter:
     def format(cls, colored_text: ColoredText) -> str:
         if not isinstance(colored_text, ColoredText):
             raise TypeError(f"colored_text should be of type ColoredText, not type {colored_text.__class__.__name__}")
-        cls._visit(colored_text)
+        return cls._visit(colored_text)
 
 class FourBitAnsiFormatter(ColoredTextFormatter):
 

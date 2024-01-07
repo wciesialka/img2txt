@@ -1,5 +1,6 @@
 import argparse
 from math import ceil, floor
+from os import linesep
 import PIL.Image as Image
 from img2txt.methods import THRESHOLD_METHODS, COLOR_METHODS
 from img2txt.characters.brailleimage import BrailleImage
@@ -66,13 +67,14 @@ def main():
         scaling_ratio = ((args.limit * 8) / image_area)**0.5
         width = floor(width * scaling_ratio)
         height = floor(height * scaling_ratio)
-        image.resize((width, height))
+        image = image.resize((width, height))
     image = image.convert('RGBA')
 
     # Create BrailleImage and write output.
     braille = BrailleImage.from_image(image, tolerance_method, tolerance = args.tolerance, invert = args.invert)
     result = braille.get_colored_text(printing_visitor)
     args.output.write(result)
+    args.output.write(linesep)
     args.image.close()
     args.output.close()
 

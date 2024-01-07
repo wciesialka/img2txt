@@ -76,6 +76,8 @@ class BrailleSegment:
             total_green += color[1]
             total_blue += color[2]
             total_segments += 1
+        if total_segments == 0:
+            return (0, 0, 0)
         return (total_red // total_segments, total_green // total_segments, total_blue // total_segments)
 
     def as_colored_text(self) -> ColoredText:

@@ -130,7 +130,7 @@ def ciede2000(lab_1: Tuple[float, float, float], lab_2: Tuple[float, float, floa
     delta_E_c = (delta_H_Prime / (K_H*S_H))**2
     delta_E_d = R_T * (delta_C_Prime / (K_C * S_C)) * (delta_H_Prime / (K_H * S_H))
     delta_E = (delta_E_a + delta_E_b + delta_E_c + delta_E_d)**0.5
-    return delta_E
+    return min(100.0, max(0.0, delta_E))
 
 def redmean(rgb_1: Tuple[int, int, int], rgb_2: Tuple[int, int, int]) -> float:
     '''Return the euclidean difference between two colors in RGB colorspace using the redmean method.

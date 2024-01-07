@@ -5,6 +5,7 @@
 from __future__ import annotations
 from math import ceil, floor
 from typing import List, Tuple
+from os import linesep
 from PIL.Image import Image
 from img2txt.characters.braillesegment import BrailleSegment, BrailleFlag
 from img2txt.methods.colors import ColoredTextFormatter
@@ -22,7 +23,7 @@ class BrailleImage:
             [BrailleSegment() for _ in range(self.char_width * self.char_height)]
 
     @classmethod
-    def from_image(cls, img: Image, tolerance: float,\
+    def from_image(cls, img: Image, tolerance: float = 0.5, invert: bool = False, \
          method) -> BrailleImage:
         '''Return a BrailleImage constructed from an Image.
         :param img: Source image.
@@ -39,7 +40,7 @@ class BrailleImage:
             for x in range(width):
                 red, green, blue, alpha = img.getpixel((x, y))
                 if alpha >= ALPHA_TOLERANCE:
-                    if method((red, green, blue)):
+                    if method((red, green, blue), tolerance=tolerance, invert=invert):
                         braille.plot(x, y, (red, green, blue))
 
         return braille
@@ -118,7 +119,7 @@ class BrailleImage:
         return_string = ""
         for i, segment in enumerate(self.__segments):
             if i > 0 and i % self.char_width == 0:
-                return_string += "\n"
+                return_string += linesep
             segment_text = segment.as_colored_text()
             return_string += formatter.format(segment_text)
         return return_string
@@ -126,17 +127,3 @@ class BrailleImage:
 
     def __repr__(self):
         return f"BrailleImage({self.width}, {self.height}, list[BrailleSegment])"
-
-    def as_str(self) -> str:
-        '''Depict image as string.
-        :returns: The complete image.
-        :rtype: str'''
-        return_string = ""
-        for i, segment in enumerate(self.__segments):
-            if i > 0 and i % self.char_width == 0:
-                return_string += "\n"
-            return_string += segment.as_char()
-        return return_string
-
-    def __str__(self):
-        return self.as_str()

@@ -44,5 +44,7 @@ def lightness_method(pixel: Tuple[int, int, int]) -> float:
     :rtype: float
     '''
     lab = rgb_to_lab(pixel)
-    lightness = lab[0] / 100.0
+    lightness = lab[0]/100
+    if lightness < 0.0 or lightness > 1.0:
+        raise ValueError(f"Lightness should fall between [0.0, 1.0], not {lightness}.")
     return lightness

@@ -7,6 +7,7 @@ from math import ceil, floor
 from typing import List, Tuple
 from PIL.Image import Image
 from img2txt.characters.braillesegment import BrailleSegment, BrailleFlag
+from img2txt.methods.colors import ColoredTextFormatter
 
 ALPHA_TOLERANCE: int = 255//2
 
@@ -105,6 +106,23 @@ class BrailleImage:
             if color is None:
                 raise ValueError("Cannot plot without setting color!")
             segment.set_flag(flag, color)
+    
+    def get_colored_text(self, formatter: ColoredTextFormatter) -> str:
+        '''Return string representation of colored text.
+
+        :param formatter: Appropriate formatter for display method.
+        :type formatter: ColoredTextFormatter
+        :return: String containing the formatted colored text.
+        :rtype: str
+        '''
+        return_string = ""
+        for i, segment in enumerate(self.__segments):
+            if i > 0 and i % self.char_width == 0:
+                return_string += "\n"
+            segment_text = segment.as_colored_text()
+            return_string += formatter.format(segment_text)
+        return return_string
+
 
     def __repr__(self):
         return f"BrailleImage({self.width}, {self.height}, list[BrailleSegment])"

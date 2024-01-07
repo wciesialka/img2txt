@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 from math import ceil, floor
-from typing import List
+from typing import List, Tuple
 from PIL.Image import Image
 from img2txt.characters.braillesegment import BrailleSegment, BrailleFlag
 
@@ -38,9 +38,8 @@ class BrailleImage:
             for x in range(width):
                 red, green, blue, alpha = img.getpixel((x, y))
                 if alpha >= ALPHA_TOLERANCE:
-                    lum = method.value(red, green, blue)
-                    if lum >= tolerance:
-                        braille.plot(x, y)
+                    if method((red, green, blue)):
+                        braille.plot(x, y, (red, green, blue))
 
         return braille
 
@@ -84,17 +83,7 @@ class BrailleImage:
             i = char_x + (char_y * self.char_width)
             return self.__segments[i]
 
-    def fill(self):
-        '''Fill the canvas.'''
-        for segment in self.__segments:
-            segment.fill()
-
-    def invert(self):
-        '''Invert the canvas.'''
-        for segment in self.__segments:
-            segment.invert()
-
-    def plot(self, x: int, y: int, *, unplot: bool = False):
+    def plot(self, x: int, y: int, color: Tuple[int, int, int] = None, *, unplot: bool = False):
         '''Plots the "pixel" residing at (x, y).
         :param x: x-coordinate to plot at.
         :type x: int
@@ -113,7 +102,9 @@ class BrailleImage:
         if unplot:
             segment.unset_flag(flag)
         else:
-            segment.set_flag(flag)
+            if color is None:
+                raise ValueError("Cannot plot without setting color!")
+            segment.set_flag(flag, color)
 
     def __repr__(self):
         return f"BrailleImage({self.width}, {self.height}, list[BrailleSegment])"
@@ -128,7 +119,6 @@ class BrailleImage:
                 return_string += "\n"
             return_string += segment.as_char()
         return return_string
-
 
     def __str__(self):
         return self.as_str()

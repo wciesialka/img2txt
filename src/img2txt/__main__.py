@@ -42,12 +42,12 @@ def hsv_to_rgb(h, s, v):
 
 def main():
     argparser = argparse.ArgumentParser(description="Convert image to text.")
-    argparser.add_argument("--method", action="store", choices=THRESHOLD_METHODS.keys(), default="luminance", help="Select method to use to determine if a pixel should be included in the image.")
-    argparser.add_argument("--tolerance", action="store", type=float, default=0.5, help="Tolerance limit for determinance method.")
-    argparser.add_argument("--invert", action='store_true', help="Include this flag to invert the determinance method.")
-    argparser.add_argument("--color", action="store", choices=COLOR_METHODS.keys(), default="none", help="Select color display method.")
-    argparser.add_argument("--limit", action="store", type=int, default=None, help="Enforce character limit.")
-    argparser.add_argument("--output", action="store", type=argparse.FileType("w", encoding="utf-8"), default="-", help="Output file.")
+    argparser.add_argument("--method", '-m', action="store", choices=THRESHOLD_METHODS.keys(), default="luminance", help="Select method to use to determine if a pixel should be included in the image.")
+    argparser.add_argument("--tolerance", '-t', action="store", type=float, default=0.5, help="Tolerance limit for determinance method.")
+    argparser.add_argument("--invert", '-i', action='store_true', help="Include this flag to invert the determinance method.")
+    argparser.add_argument("--color", '-c', action="store", choices=COLOR_METHODS.keys(), default="none", help="Select color display method.")
+    argparser.add_argument("--limit", '-l', action="store", type=int, default=None, help="Enforce character limit.")
+    argparser.add_argument("--output", '-o', action="store", type=argparse.FileType("w", encoding="utf-8"), default="-", help="Output file.")
     argparser.add_argument("image", action="store", type=argparse.FileType("rb"))
     
     args = argparser.parse_args()

@@ -5,6 +5,7 @@
 
 from abc import abstractmethod
 from img2txt.characters.coloredtext import ColoredText
+from os import linesep
 
 class ColoredTextFormatter:
 
@@ -41,7 +42,7 @@ class HTMLFormatter(ColoredTextFormatter):
 
     @staticmethod
     def _visit(colored_text: ColoredText):
-        return colored_text.html()
+        return colored_text.html().replace(linesep, '<br>')
 
 class PlaintextFormatter(ColoredTextFormatter):
 

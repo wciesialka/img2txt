@@ -1,6 +1,6 @@
 # img2txt
 
-Turn an image into text using unicode braille symbols.
+Turn an image into text using unicode braille symbols. Includes color support for 4-bit ANSI, 8-bit ANSI, True Color ANSI, and HTML.
 
 ## Getting Started
 
@@ -32,16 +32,19 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  --method {luminance,lightness}
+  --method {luminance,lightness}, -m {luminance,lightness}
                         Select method to use to determine if a pixel should be
                         included in the image.
-  --tolerance TOLERANCE
+  --tolerance TOLERANCE, -t TOLERANCE
                         Tolerance limit for determinance method.
-  --invert              Include this flag to invert the determinance method.
-  --color {none,4bitansi,8bitansi,truecoloransi,html}
+  --invert, -i          Include this flag to invert the determinance method.
+  --color {none,4bitansi,8bitansi,truecoloransi,html}, -c {none,4bitansi,8bitansi,truecoloransi,html}
                         Select color display method.
-  --limit LIMIT         Enforce character limit.
-  --output OUTPUT       Output file. Defaults to STDOUT.
+  --limit LIMIT, -l LIMIT
+                        Enforce character limit.
+  --output OUTPUT, -o OUTPUT
+                        Output file.
+
 ```
 
 ## Authors

@@ -42,7 +42,7 @@ class HTMLFormatter(ColoredTextFormatter):
 
     @staticmethod
     def _visit(colored_text: ColoredText):
-        return colored_text.html().replace(linesep, '<br>')
+        return colored_text.html()
 
 class PlaintextFormatter(ColoredTextFormatter):
 

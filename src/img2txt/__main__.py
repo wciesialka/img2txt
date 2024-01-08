@@ -73,6 +73,8 @@ def main():
     # Create BrailleImage and write output.
     braille = BrailleImage.from_image(image, tolerance_method, tolerance = args.tolerance, invert = args.invert)
     result = braille.get_colored_text(printing_visitor)
+    if args.color == "html":
+        result = result.replace(linesep, '<br>')
     args.output.write(result)
     args.output.write(linesep)
     args.image.close()

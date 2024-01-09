@@ -5,6 +5,7 @@
 
 from abc import abstractmethod
 from img2txt.characters.coloredtext import ColoredText
+from os import linesep
 
 class ColoredTextFormatter:
 
